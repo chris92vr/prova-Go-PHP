@@ -1,0 +1,11 @@
+{
+  "name": "prova-Go-PHP",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/chris92vr/prova-Go-PHP.git",
+  "author": "chris92vr <65112255+chris92vr@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "vercel": "^23.1.2"
+  }
+}
