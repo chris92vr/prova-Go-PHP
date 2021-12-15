@@ -6,6 +6,12 @@
   "author": "chris92vr <65112255+chris92vr@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
+    "concurrently": "^6.4.0",
     "vercel": "^23.1.2"
+  },
+  "scripts": {
+    "dev:vercel": "yarn vercel dev",
+    "dev:php": "php -S localhost:9000 api/info.php",
+    "dev": "concurrently \"yarn:dev:*\""
   }
 }
