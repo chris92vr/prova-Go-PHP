@@ -46,7 +46,7 @@ func MyWeather(w http.ResponseWriter, r *http.Request) {
 
 	jsonResp, err := json.Marshal(resp)
 	if err != nil {
-		fmt.Println("Error happened in JSON marshal. Err:", err)
+		fmt.Println("Error happened in JSON marshal. Error:", err)
 	} else {
 		w.Write(jsonResp)
 	}
