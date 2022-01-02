@@ -32,8 +32,8 @@ func MyWeather(w http.ResponseWriter, r *http.Request) {
 	var userLocation map[string]interface{}
 	json.Unmarshal([]byte(userLocationBody), &userLocation)
 
-	resp["city"] = fmt.Sprint(userLocation["latitude"])
-	resp["country_code"] = fmt.Sprint(userLocation["longitude"])
+	resp["city"] = fmt.Sprint(userLocation["city"])
+	resp["country_code"] = fmt.Sprint(userLocation["country_code"])
 
 	// Response API Weather
 	urlWeatherApi := "https://api.openweathermap.org/data/2.5/weather?q=" + resp["city"] + "," + resp["country_code"] + "&appid=" + os.Getenv("API_KEY_OPENWEATHER")
