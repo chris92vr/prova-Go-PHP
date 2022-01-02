@@ -32,11 +32,11 @@ func MyWeather(w http.ResponseWriter, r *http.Request) {
 	var userLocation map[string]interface{}
 	json.Unmarshal([]byte(userLocationBody), &userLocation)
 
-	resp["latitude"] = fmt.Sprint(userLocation["latitude"].(float64))
-	resp["longitude"] = fmt.Sprint(userLocation["longitude"].(float64))
+	resp["city"] = fmt.Sprint(userLocation["latitude"])
+	resp["country_code"] = fmt.Sprint(userLocation["longitude"])
 
 	// Response API Weather
-	urlWeatherApi := "https://api.openweathermap.org/data/2.5/weather?lat=" + resp["latitude"] + "&lon=" + resp["longitude"] + "&appid=" + os.Getenv("API_KEY_OPENWEATHER")
+	urlWeatherApi := "https://api.openweathermap.org/data/2.5/weather?q=" + resp["city"] + "," + resp["country_code"] + "&appid=" + os.Getenv("API_KEY_OPENWEATHER")
 	fmt.Println("Weather API Json String:", urlWeatherApi)
 	weatherApiResponse, err := http.Get(urlWeatherApi)
 	weatherApiBody, err := ioutil.ReadAll(weatherApiResponse.Body)
@@ -50,5 +50,5 @@ func MyWeather(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.Write(jsonResp)
 	}
-	return
+
 }
