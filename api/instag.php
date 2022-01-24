@@ -1,21 +1,29 @@
 <?php
 
-$client = new http\Client;
-$request = new http\Client\Request;
+$curl = curl_init();
 
-$request->setRequestUrl('https://instagram-data1.p.rapidapi.com/location/feed');
-$request->setRequestMethod('GET');
-$request->setQuery(new http\QueryString([
-	'location_id' => '213385402',
-	'end_cursor' => '2312589909032003834'
-]));
-
-$request->setHeaders([
-	'x-rapidapi-host' => 'instagram-data1.p.rapidapi.com',
-	'x-rapidapi-key' => '251669fb4bmshce01bc256be2467p164627jsnefa56c023a18'
+curl_setopt_array($curl, [
+	CURLOPT_URL => "https://instagram28.p.rapidapi.com/user_info?user_name=avtistkid",
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_ENCODING => "",
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 30,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => "GET",
+	CURLOPT_HTTPHEADER => [
+		"x-rapidapi-host: instagram28.p.rapidapi.com",
+		"x-rapidapi-key: 251669fb4bmshce01bc256be2467p164627jsnefa56c023a18"
+	],
 ]);
 
-$client->enqueue($request)->send();
-$response = $client->getResponse();
+$response = curl_exec($curl);
+$err = curl_error($curl);
 
-echo $response->getBody();
+curl_close($curl);
+
+if ($err) {
+	echo "cURL Error #:" . $err;
+} else {
+	echo $response;
+}
