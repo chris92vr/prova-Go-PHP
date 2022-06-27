@@ -18,7 +18,7 @@ func GetMeme(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("GetMeme API Json String:", getMemeJson)
 	var getMeme map[string]interface{}
 	json.Unmarshal([]byte(getMemeBody), &getMeme)
-	resp["url"] = fmt.Sprint(getMeme["url"])
+	resp["message"] = fmt.Sprint(getMeme["message"])
 	jsonResp, err := json.Marshal(resp)
 	if err != nil {
 		fmt.Println("Error happened in JSON marshal. Err: %s", err)
