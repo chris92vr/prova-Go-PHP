@@ -18,7 +18,7 @@ func insta(w http.ResponseWriter, r *http.Request) {
 	res, _ := http.DefaultClient.Do(req)
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
-	fmt.Println(res)
+	fmt.Println(w, res)
 	fmt.Println(string(body))
 
 }
