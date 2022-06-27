@@ -11,7 +11,7 @@ func GetMeme(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	resp := make(map[string]string)
-	getMemeApi := "https://api.imgflip.com/get_memes"
+	getMemeApi := "https://dog.ceo/api/breeds/image/random"
 	getMemeResponse, err := http.Get(getMemeApi)
 	getMemeBody, err := ioutil.ReadAll(getMemeResponse.Body)
 	getMemeJson := string(getMemeBody)
