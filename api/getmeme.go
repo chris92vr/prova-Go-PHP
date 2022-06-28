@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"golang.org/x/text/message"
 )
 
 func GetMeme(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +26,7 @@ func GetMeme(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error happened in JSON marshal. Err: %s", err)
 	} else {
 		w.Write(jsonResp)
+		return (' <img src="'+ jsonResp["message"] +'" width="500" height="600"> ')
 	}
 	return
 }
