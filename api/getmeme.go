@@ -5,24 +5,48 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"html/template"
 )
 
-func GetMeme(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-	w.Header().Set("Access-Control-Allow-Credentials", "true")
-	if r.Method == "OPTIONS" {
-		return
-	}
-	var data map[string]interface{}
-	body, err := ioutil.ReadAll(r.Body)
+func GetMemeTemplate(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Content-Type", "text/html")
+	resp := make(map[string]string)
+	getMemeApi := "https://dog.ceo/api/breeds/image/random"
+	getMemeResponse, err := http.Get(getMemeApi)
+	getMemeBody, err := ioutil.ReadAll(getMemeResponse.Body)
+	getMemeJson := string(getMemeBody)
+	fmt.Println("GetMeme API Json String:", getMemeJson)
+	var getMeme map[string]interface{}
+	json.Unmarshal([]byte(getMemeBody), &getMeme)
+	resp["message"] = fmt.Sprint(getMeme["message"])
+	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error happened in template. Err: %s", err)
+	} else {
+		tmpl.Execute(w, resp)
 	}
-	json.Unmarshal(body, &data)
-	fmt.Println(data)
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(data)
+	return
+}
+
+func GetMeme(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Content-Type", "application/json")
+	resp := make(map[string]string)
+	getMemeApi := "https://dog.ceo/api/breeds/image/random"
+	getMemeResponse, err := http.Get(getMemeApi)
+	getMemeBody, err := ioutil.ReadAll(getMemeResponse.Body)
+	getMemeJson := string(getMemeBody)
+	fmt.Println("GetMeme API Json String:", getMemeJson)
+	var getMeme map[string]interface{}
+	json.Unmarshal([]byte(getMemeBody), &getMeme)
+	resp["message"] = fmt.Sprint(getMeme["message"])
+	jsonResp, err := json.Marshal(resp)
+	if err != nil {
+		fmt.Println("Error happened in JSON marshal. Err: %s", err)
+	} else {
+		w.Write(jsonResp)
+	}
+	return
 }
