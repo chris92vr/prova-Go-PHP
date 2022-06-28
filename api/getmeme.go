@@ -6,12 +6,12 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"golang.org/x/text/message"
+	"html/template"
 )
 
-func GetMeme(w http.ResponseWriter, r *http.Request) {
+func GetMemeTemplate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "text/html")
 	resp := make(map[string]string)
 	getMemeApi := "https://dog.ceo/api/breeds/image/random"
 	getMemeResponse, err := http.Get(getMemeApi)
@@ -21,12 +21,11 @@ func GetMeme(w http.ResponseWriter, r *http.Request) {
 	var getMeme map[string]interface{}
 	json.Unmarshal([]byte(getMemeBody), &getMeme)
 	resp["message"] = fmt.Sprint(getMeme["message"])
-	jsonResp, err := json.Marshal(resp)
+	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
-		fmt.Println("Error happened in JSON marshal. Err: %s", err)
+		fmt.Println("Error happened in template. Err: %s", err)
 	} else {
-		w.Write(jsonResp)
-		w.Write(' <img src="'+ jsonResp["message"] +'" width="500" height="600"> ')
+		tmpl.Execute(w, resp)
 	}
 	return
 }
