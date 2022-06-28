@@ -28,7 +28,9 @@ func GetMeme(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error happened in JSON marshal. Err: %s", err)
 	} else {
 		fmt.Println("JSON Response:", string(jsonResp))
-		t.Execute(w, string(jsonResp))
+		t.Execute(w, (jsonResp))
+
+
 	}
 	return
 }
