@@ -5,32 +5,24 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
-	"html/template"
 )
 
 func GetMeme(w http.ResponseWriter, r *http.Request) {
-	const templ = '<html><body><img src="{{.}}"></body></html>'
-	t := template.Must(template.New("").Parse(templ))
-	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
-	resp := make(map[string]string)
-	getMemeApi := "https://dog.ceo/api/breeds/image/random"
-	getMemeResponse, err := http.Get(getMemeApi)
-	getMemeBody, err := ioutil.ReadAll(getMemeResponse.Body)
-	getMemeJson := string(getMemeBody)
-	fmt.Println("GetMeme API Json String:", getMemeJson)
-	var getMeme map[string]interface{}
-	json.Unmarshal([]byte(getMemeBody), &getMeme)
-	resp["message"] = fmt.Sprint(getMeme["message"])
-	jsonResp, err := json.Marshal(resp)
-	if err != nil {
-		fmt.Println("Error happened in JSON marshal. Err: %s", err)
-	} else {
-		fmt.Println("JSON Response:", string(jsonResp))
-		t.Execute(w, (jsonResp))
-
-
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	if r.Method == "OPTIONS" {
+		return
 	}
-	return
+	var data map[string]interface{}
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+	json.Unmarshal(body, &data)
+	fmt.Println(data)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(data)
 }
