@@ -11,19 +11,19 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	resp := make(map[string]string)
-	getDogApi := "https://dog.ceo/api/breeds/image/random"
-	dogApiResponse, _ := http.Get(getDogApi)
-	dogApiBody, _ := ioutil.ReadAll(dogApiResponse.Body)
-	dogApiJson := string(dogApiBody)
-	var dogApi map[string]interface{}
-	json.Unmarshal([]byte(dogApiJson), &dogApi)
-	resp["dog"] = fmt.Sprint(dogApi["message"])
+	getDogAPI := "https://dog.ceo/api/breeds/image/random"
+	dogResponse, err := http.Get(getDogAPI)
+	dogBody, err := ioutil.ReadAll(dogResponse.Body)
+	dogJson := string(dogBody)
+	fmt.Println("Dog API Json String:", dogJson)
+	var dog map[string]interface{}
+	json.Unmarshal([]byte(dogJson), &dog)
+	resp["dog"] = fmt.Sprint(dog["message"])
 	jsonResp, err := json.Marshal(resp)
 	if err != nil {
 		fmt.Println("Error happened in JSON marshal. Err: %s", err)
 	} else {
 		w.Write(jsonResp)
 	}
-	fmt.Fprintf(w, resp["dog"], "<img src='"+resp["dog"]+"'>")
 
 }
